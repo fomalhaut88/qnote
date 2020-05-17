@@ -60,7 +60,7 @@
     position: relative;
     background-color: white;
     margin: 0 auto;
-    transform: translateY(calc(50vh - 50%));
+    transform: translateY(minmax(0, calc(50vh - 50%)));
     padding: 18px;
     max-width: 400px;
   }
