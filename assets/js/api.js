@@ -5,12 +5,6 @@ export default class Api {
     constructor() {
         this._auth = null;
 
-        // this._http = axios.create({
-        //     baseURL: `http://hashstorage.fomalhaut.su/api/`,
-        //     headers: {
-        //         'Access-Control-Allow-Origin': "*",
-        //     },
-        // });
         this._http = axios.create({
             baseURL: `/api/`,
         });
