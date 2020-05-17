@@ -96,7 +96,6 @@ export default class Auth {
     }
 
     encrypt(data) {
-        console.log(aes256.encrypt(this.privateKey, data));
         return aes256.encrypt(this.privateKey, data);
     }
 
