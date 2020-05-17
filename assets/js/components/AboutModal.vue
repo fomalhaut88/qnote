@@ -8,6 +8,9 @@ Qnote is a client side application that interacts by API with the service Hash S
 Links to the source code:
 Qnote: <a href="https://github.com/fomalhaut88/qnote" target="blank">https://github.com/fomalhaut88/qnote</a>
 Hash Storage: <a href="https://github.com/fomalhaut88/hash-storage" target="blank">https://github.com/fomalhaut88/hash-storage</a>
+
+Copyright: Alexander Khlebushchev
+<a href="https://fomalhaut.su/" target="blank">https://fomalhaut.su/</a>
     </p>
     <button class="btn btn-primary" @click="hide()">OK</button>
   </modal>
