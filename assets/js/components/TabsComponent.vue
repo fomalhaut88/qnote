@@ -79,11 +79,13 @@
 
       moveLeftTab(tabIdx) {
         this.$state.moveLeftTab(this.workspaceId, tabIdx);
+        this.$root.$emit('tab_changed');
         this.$forceUpdate();
       },
 
       moveRightTab(tabIdx) {
         this.$state.moveRightTab(this.workspaceId, tabIdx);
+        this.$root.$emit('tab_changed');
         this.$forceUpdate();
       },
 
