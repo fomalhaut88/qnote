@@ -1,0 +1,8 @@
+*~
+
+/webpack-stats.json
+/package-lock.json
+
+/node_modules/
+/assets/hash-storage-wasm/
+/assets/bundles/

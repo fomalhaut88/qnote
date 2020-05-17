@@ -1,0 +1,18 @@
+@import 'colors';
+@import 'bootstrap';
+
+html, body {
+    height: 100vh;
+}
+
+.main {
+    height: 100%;
+    .header {
+        background-color: #F8F8F8;
+        min-height: 42px;
+        border-bottom: 1px solid #CCC;
+    }
+    .area {
+        height: calc(100% - 42px);
+    }
+}
