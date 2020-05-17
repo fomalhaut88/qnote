@@ -17,9 +17,10 @@ export default class LazyUpdater {
                 () => {
                     if (this._stack.length && !this._procLock) {
                         this._procLock = true;
-                        this._handler(this._stack, () => {
+                        var stack = this._stack.slice();
+                        this._handler(stack, () => {
+                            this._stack.splice(0, stack.length);
                             this._procLock = false;
-                            this._stack.length = 0;
                         });
                     }
                 },
