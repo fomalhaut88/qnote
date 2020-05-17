@@ -1,4 +1,4 @@
-import zlib from 'zlib';
+import aes256 from 'aes256';
 
 
 export default class Auth {
@@ -96,13 +96,12 @@ export default class Auth {
     }
 
     encrypt(data) {
-        var compressed = this._compress(data);
-        return this.wasm.encrypt(this.publicKey, compressed);
+        console.log(aes256.encrypt(this.privateKey, data));
+        return aes256.encrypt(this.privateKey, data);
     }
 
     decrypt(block) {
-        var compressed = this.wasm.decrypt(this.privateKey, block);
-        return this._decompress(compressed);
+        return aes256.decrypt(this.privateKey, block);
     }
 
     buildSignature(key, block) {
@@ -119,13 +118,5 @@ export default class Auth {
 
     checkSecretSignature(secret, secretSignature) {
         return this.wasm.check_secret_signature(this.publicKey, secret, secretSignature);
-    }
-
-    _compress(s) {
-        return zlib.gzipSync(new Buffer(s)).toString('base64');
-    }
-
-    _decompress(s) {
-        return zlib.unzipSync(Buffer.from(s, 'base64')).toString();
     }
 }
