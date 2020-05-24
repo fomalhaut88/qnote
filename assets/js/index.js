@@ -49,6 +49,15 @@ window.onload = function() {
             wasm_bindgen("assets/hash-storage-wasm/hash_storage_wasm_bg.wasm").then(() => {
                 const worker = new UpdateWorker();
 
+                worker.addEventListener('message', e => {
+                    if (e.data.isPerforming !== undefined) {
+                        this.$root.$emit('worker_performing', e.data.isPerforming);
+                    }
+                    if (e.data.error !== undefined) {
+                        this.$root.$emit('worker_error', e.data.error);
+                    }
+                }, false);
+
                 this.$auth.init(wasm_bindgen);
                 this.$auth.load();
                 this.$api.init(this.$auth);

@@ -5,7 +5,8 @@
         <tabs-component />
       </div>
       <div class="ml-auto mr-1">
-        <menu-component />
+        <refresh-component class="float-left" />
+        <menu-component class="float-left" />
       </div>
     </div>
     <div class="area">

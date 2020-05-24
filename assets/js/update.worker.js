@@ -6,6 +6,13 @@ importScripts("../hash-storage-wasm/hash_storage_wasm.js");
 
 
 wasm_bindgen("../hash-storage-wasm/hash_storage_wasm_bg.wasm").then(() => {
+    /* sendError */
+
+    var sendError = err => {
+        self.postMessage({ error: err });
+    };
+
+
     /* cleanStack */
 
     var cleanStack = stack => {
@@ -60,12 +67,24 @@ wasm_bindgen("../hash-storage-wasm/hash_storage_wasm_bg.wasm").then(() => {
         // Requests to hashstorage
         if (item.type == 'workspace') {
             if (item.data.action == 'remove') {
-                api.delete(key, callback);
+                api.delete(key, callback, err => {
+                    console.error(err);
+                    self.postMessage({ error: "Server error." });
+                    callback();
+                });
             } else {
-                api.save(key, data, callback);
+                api.save(key, data, callback, err => {
+                    console.error(err);
+                    self.postMessage({ error: "Server error." });
+                    callback();
+                });
             }
         } else {
-            api.save(key, data, callback);
+            api.save(key, data, callback, err => {
+                console.error(err);
+                self.postMessage({ error: "Server error." });
+                callback();
+            });
         }
     };
 
@@ -73,8 +92,12 @@ wasm_bindgen("../hash-storage-wasm/hash_storage_wasm_bg.wasm").then(() => {
     /* updater */
 
     var updater = new LazyUpdater((stack, callback) => {
+        self.postMessage({ isPerforming: true });
         var cleaned = cleanStack(stack);
-        loopStack(cleaned, performItem, callback);
+        loopStack(cleaned, performItem, () => {
+            self.postMessage({ isPerforming: false });
+            callback();
+        });
     }, 1000);
     updater.start();
 

@@ -23,18 +23,24 @@ export default class Api {
         });
     }
 
-    get(key, callback) {
+    get(key, callback, callbackError) {
         this._http.post("get", {
             public_key: this._auth.publicKey,
             data_key: key,
         }).then(response => {
             var data = this._extractData(response.data);
             callback(data);
+        }, response => {
+            if (callbackError) {
+                callbackError(response);
+            } else {
+                throw new Error("Failed to get block.");
+            }
         });
     }
 
-    save(key, data, callback) {
-        var handler = (secret, callback) => {
+    save(key, data, callback, callbackError) {
+        var handler = (secret, callback, callbackError) => {
             var block = this._auth.encrypt(data);
             var signature = this._auth.buildSignature(key, block);
             var secretSignature = secret ? this._auth.buildSecretSignature(secret) : "";
@@ -50,7 +56,11 @@ export default class Api {
                     callback();
                 }
             }, response => {
-                throw new Error("Failed to save block.");
+                if (callbackError) {
+                    callbackError(response);
+                } else {
+                    throw new Error("Failed to save block.");
+                }
             });
         };
 
@@ -58,13 +68,13 @@ export default class Api {
             public_key: this._auth.publicKey,
             data_key: key,
         }).then(response => {
-            handler(response.data.secret, callback);
+            handler(response.data.secret, callback, callbackError);
         }, response => {
-            handler("", callback);
+            handler("", callback, callbackError);
         });
     }
 
-    delete(key, callback) {
+    delete(key, callback, callbackError) {
         this._http.post("get", {
             public_key: this._auth.publicKey,
             data_key: key,
@@ -82,9 +92,25 @@ export default class Api {
                         callback();
                     }
                 } else {
+                    if (callbackError) {
+                        callbackError(response);
+                    } else {
+                        throw new Error("Failed to delete block.");
+                    }
+                }
+            }, response => {
+                if (callbackError) {
+                    callbackError(response);
+                } else {
                     throw new Error("Failed to delete block.");
                 }
             });
+        }, response => {
+            if (callbackError) {
+                callbackError(response);
+            } else {
+                throw new Error("Failed to delete block.");
+            }
         });
     }
 
