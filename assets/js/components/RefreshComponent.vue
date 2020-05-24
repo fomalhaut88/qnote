@@ -30,10 +30,12 @@
 </script>
 
 <style lang="scss" scoped>
+  @import 'assets/scss/colors';
+
   .refresh-icon {
     margin-top: 3px;
     font-size: 20px;
-    color: #0060A0;
+    color: $primary;
     opacity: 0.125;
   }
 </style>
