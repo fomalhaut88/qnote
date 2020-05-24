@@ -5,7 +5,7 @@
         <fa-icon icon="ellipsis-v" class="btn btn-primary menu-btn" />
       </template>
 
-      <b-dropdown-item v-for="ws in $state.getWorkspaces()" :key="ws.id"
+      <b-dropdown-item v-for="ws in getWorkspaces()" :key="ws.id"
                        @click="setActiveWorkspace(ws.id)">
         <fa-icon class="menu-dropdown-icon"
                  :icon="$state.isActiveWorkspace(ws.id) ? 'check' : 'empty'" />
@@ -37,6 +37,12 @@
 <script>
   export default {
     methods: {
+      getWorkspaces() {
+        var workspaces = Object.values(this.$state.getWorkspaces());
+        workspaces.sort((ws1, ws2) => (ws1.name > ws2.name) ? 1 : -1);
+        return workspaces;
+      },
+
       logout() {
         this.$auth.logout();
         window.location.reload();
