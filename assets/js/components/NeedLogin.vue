@@ -1,7 +1,7 @@
 <template>
   <div>
     <modal ref="refModal" class="text-center" @click.stop="">
-      <h3>Login</h3>
+      <h3>Login or Registration</h3>
       <div class="alert alert-danger" v-show="error">{{ error }}</div>
       <div class="form-group">
         <input type="text" class="form-control" placeholder="Username" v-model="username">
@@ -9,7 +9,7 @@
       <div class="form-group">
         <input type="password" class="form-control" placeholder="Password" v-model="password">
       </div>
-      <button class="btn btn-primary" @click="login()" :disabled="!username || !password">Login</button>
+      <button class="btn btn-primary" @click="login()" :disabled="!username || !password">Login or sign up</button>
     </modal>
 
     <modal ref="refRegistrationModal" class="text-center" @click.stop="">
