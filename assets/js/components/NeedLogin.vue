@@ -1,6 +1,6 @@
 <template>
   <div>
-    <modal ref="refModal" class="text-center" @click.stop="">
+    <modal ref="refModal" class="text-center" @click.stop="" disable-close>
       <h3>Login or Registration</h3>
       <div class="alert alert-danger" v-show="error">{{ error }}</div>
       <div class="form-group">

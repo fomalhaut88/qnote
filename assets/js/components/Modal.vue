@@ -2,7 +2,7 @@
   <div v-show="isShown">
     <div class="whole">
       <div class="content">
-        <span class="close" @click="hide()">&times;</span>
+        <span class="close" @click="hide()" v-if="!disableClose">&times;</span>
         <slot></slot>
       </div>
     </div>
@@ -13,6 +13,7 @@
   export default {
     props: {
       escHide: Boolean,
+      disableClose: Boolean,
     },
     data() {
       return {
