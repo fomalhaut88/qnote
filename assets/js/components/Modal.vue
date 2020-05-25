@@ -1,6 +1,6 @@
 <template>
   <div v-show="isShown">
-    <div class="whole">
+    <div class="whole" :style="{ 'z-index': zIndex }">
       <div class="content">
         <span class="close" @click="hide()" v-if="!disableClose">&times;</span>
         <slot></slot>
@@ -14,6 +14,7 @@
     props: {
       escHide: Boolean,
       disableClose: Boolean,
+      zIndex: { type: Number, default: 1 }
     },
     data() {
       return {
@@ -48,7 +49,6 @@
 <style lang="scss" scoped>
   .whole {
     position: fixed;
-    z-index: 1;
     left: 0;
     top: 0;
     width: 100%;

@@ -58,6 +58,10 @@
       this.$root.$on('workspace_changed', () => {
         this.$forceUpdate();
       });
+
+      this.$root.$on('show_about', () => {
+        this.$refs.refAboutModal.show();
+      });
     },
   }
 </script>

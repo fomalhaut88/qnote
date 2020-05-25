@@ -9,7 +9,12 @@
       <div class="form-group">
         <input type="password" class="form-control" placeholder="Password" v-model="password">
       </div>
-      <button class="btn btn-primary" @click="login()" :disabled="!username || !password">Login or sign up</button>
+      <div>
+        <button class="btn btn-primary" @click="login()" :disabled="!username || !password">Login or sign up</button>
+      </div>
+      <div>
+        <a href="#" @click="$root.$emit('show_about')">About Qnote</a>
+      </div>
     </modal>
 
     <modal ref="refRegistrationModal" class="text-center" @click.stop="">
