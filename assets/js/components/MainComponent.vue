@@ -4,9 +4,9 @@
       <div class="mr-auto ml-1">
         <tabs-component />
       </div>
-      <div class="ml-auto mr-1">
-        <refresh-component class="float-left" />
-        <menu-component class="float-left" />
+      <div class="ml-auto mr-1 d-flex">
+        <refresh-component />
+        <menu-component />
       </div>
     </div>
     <div class="area">
