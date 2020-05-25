@@ -10,4 +10,4 @@ RUN npm install
 COPY . .
 RUN ./node_modules/.bin/webpack
 
-CMD ["./node_modules/.bin/http-server", "--proxy", "http://hashstorage.fomalhaut.su/"]
+CMD ["./node_modules/.bin/http-server"]
