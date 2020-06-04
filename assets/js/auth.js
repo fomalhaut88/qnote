@@ -1,6 +1,9 @@
 import aes256 from 'aes256';
 
 
+const APP_ID = "47bc73da-ab00-4de6-9b76-5bd77f150ec4";
+
+
 export default class Auth {
     constructor() {
         this.privateKey = null;
@@ -86,7 +89,7 @@ export default class Auth {
     }
 
     login(username, password) {
-        var secret = `${username}:${password}`;
+        var secret = `${APP_ID}:${username}:${password}`;
         this.privateKey = this.wasm.get_private_key(secret);
         this.publicKey = this.wasm.get_public_key(this.privateKey);
     }
