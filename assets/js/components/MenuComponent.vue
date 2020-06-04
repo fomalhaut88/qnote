@@ -17,6 +17,12 @@
       <b-dropdown-item @click="$refs.refAboutModal.show()">
         <fa-icon class="menu-dropdown-icon" icon="info" /> About Qnote
       </b-dropdown-item>
+      <b-dropdown-item @click="$refs.refExportModal.show()">
+        <fa-icon class="menu-dropdown-icon" icon="download" /> Export
+      </b-dropdown-item>
+      <b-dropdown-item @click="$refs.refImportModal.show()">
+        <fa-icon class="menu-dropdown-icon" icon="upload" /> Import
+      </b-dropdown-item>
       <b-dropdown-item @click="$refs.refSettingsModal.show()">
         <fa-icon class="menu-dropdown-icon" icon="cog" /> Settings
       </b-dropdown-item>
@@ -26,6 +32,8 @@
     </b-dropdown>
 
     <about-modal ref="refAboutModal" />
+    <export-modal ref="refExportModal" />
+    <import-modal ref="refImportModal" />
     <settings-modal ref="refSettingsModal" />
     <confirm-dialog ref="refLogoutDialog"
                     title="Logout"
