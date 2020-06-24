@@ -6,19 +6,39 @@ importScripts("../hash-storage-wasm/hash_storage_wasm.js?v=0.3");
 
 
 wasm_bindgen("../hash-storage-wasm/hash_storage_wasm_bg.wasm").then(() => {
+    var workspaceVersionCache = {};
+
+
     /* sendError */
 
     var sendError = err => {
-        self.postMessage({ error: err });
+        self.postMessage({ type: "error", error: err });
     };
 
 
-    /* cleanStack */
+    /* compareVersions */
 
-    var cleanStack = stack => {
+    var compareVersions = (localVerion, remoteVersion) => {
+        return !localVerion || !remoteVersion || (localVerion == remoteVersion);
+    };
+
+
+    /* incrementVersion */
+
+    var incrementVersion = version => {
+        if (!version) {
+            version = "0";
+        }
+        return (parseInt(version) + 1).toString();
+    };
+
+
+    /* cleanQueue */
+
+    var cleanQueue = queue => {
         var cleaned = [];
         var updateWorkspaceMap = {};
-        stack.forEach((item, idx) => {
+        queue.forEach((item, idx) => {
             if (item.type == 'workspace') {
                 if (item.data.action == 'update') {
                     var workspaceId = item.data.workspace.id;
@@ -34,17 +54,17 @@ wasm_bindgen("../hash-storage-wasm/hash_storage_wasm_bg.wasm").then(() => {
     };
 
 
-    /* loopStack */
+    /* loopQueue */
 
-    var loopStack = (stack, handler, callback, idx) => {
+    var loopQueue = (queue, handler, callback, idx) => {
         if (idx === undefined) {
             idx = 0;
         }
-        if (idx >= stack.length) {
+        if (idx >= queue.length) {
             callback();
         } else {
-            handler(stack[idx], () => {
-                loopStack(stack, handler, callback, idx + 1);
+            handler(queue[idx], () => {
+                loopQueue(queue, handler, callback, idx + 1);
             });
         }
     };
@@ -69,20 +89,51 @@ wasm_bindgen("../hash-storage-wasm/hash_storage_wasm_bg.wasm").then(() => {
             if (item.data.action == 'remove') {
                 api.delete(key, callback, err => {
                     console.error(err);
-                    self.postMessage({ error: "Server error." });
+                    sendError("Server error.");
                     callback();
                 });
             } else {
-                api.save(key, data, callback, err => {
-                    console.error(err);
-                    self.postMessage({ error: "Server error." });
-                    callback();
-                });
+                // Save workspace function
+                var saveWorkspace = (key, data, version, callback) => {
+                    api.save(key, data, version, callback, err => {
+                        console.error(err);
+                        sendError("Server error.");
+                        callback();
+                    });
+                };
+
+                // Getting workspace version from workspaceVersionCache if it exists
+                // else take the version provided by the state (item.data.version)
+                var version = workspaceVersionCache[item.data.workspaceId] ?
+                              workspaceVersionCache[item.data.workspaceId] :
+                              item.data.version;
+
+                // We compare version on update only
+                if (item.data.action == 'update') {
+                    api.get(key, workspaceData => {
+                        // Checking local and remove versions
+                        var match = compareVersions(version, workspaceData.version);
+
+                        // If they match, increment the local version and save the data
+                        // else ask the client to reload the page.
+                        if (match) {
+                            version = incrementVersion(version);
+                            saveWorkspace(key, data, version, () => {
+                                workspaceVersionCache[item.data.workspaceId] = version;
+                                callback();
+                            });
+                        } else {
+                            sendError("Remote version does not match. Reload the page.");
+                        }
+                    });
+                } else {
+                    saveWorkspace(key, data, version, callback);
+                }
             }
         } else {
-            api.save(key, data, callback, err => {
+            api.save(key, data, "", callback, err => {
                 console.error(err);
-                self.postMessage({ error: "Server error." });
+                sendError("Server error.");
                 callback();
             });
         }
@@ -91,11 +142,11 @@ wasm_bindgen("../hash-storage-wasm/hash_storage_wasm_bg.wasm").then(() => {
 
     /* updater */
 
-    var updater = new LazyUpdater((stack, callback) => {
-        self.postMessage({ isPerforming: true });
-        var cleaned = cleanStack(stack);
-        loopStack(cleaned, performItem, () => {
-            self.postMessage({ isPerforming: false });
+    var updater = new LazyUpdater((queue, callback) => {
+        self.postMessage({ type: "status", isPerforming: true });
+        var cleaned = cleanQueue(queue);
+        loopQueue(cleaned, performItem, () => {
+            self.postMessage({ type: "status", isPerforming: false });
             callback();
         });
     }, 1000);

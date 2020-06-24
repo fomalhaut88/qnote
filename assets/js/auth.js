@@ -106,13 +106,13 @@ export default class Auth {
         return aes256.decrypt(this.privateKey, block);
     }
 
-    buildSignature(key, block) {
-        var data = key + block;
+    buildSignature(key, block, version) {
+        var data = key + block + version;
         return this.wasm.build_signature(this.privateKey, data);
     }
 
-    checkSignature(key, block, signature) {
-        var data = key + block;
+    checkSignature(key, block, version, signature) {
+        var data = key + block + version;
         return this.wasm.check_signature(this.publicKey, data, signature);
     }
 

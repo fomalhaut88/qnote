@@ -28,7 +28,7 @@
                 var data = JSON.parse(this.content);
 
                 var promises = data.map(item => new Promise((resolve, reject) => {
-                    this.$api.save(item.key, item.data, resolve, reject);
+                    this.$api.save(item.key, item.data, "", resolve, reject);
                 }));
 
                 Promise.all(promises).then(() => {

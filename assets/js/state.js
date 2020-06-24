@@ -5,6 +5,7 @@ export default class State {
     constructor() {
         this._data = null;
         this._workspaces = {};
+        this._workspaceVersions = {};
 
         this._auth = null;
         this._api = null;
@@ -189,6 +190,7 @@ export default class State {
             activeWorkspaceId: null,
         };
         this._workspaces = {};
+        this._workspaceVersions = {};
         this._ensureWorkspace();
     }
 
@@ -204,6 +206,7 @@ export default class State {
                         this._data = JSON.parse(item.data);
                     } else {
                         this._workspaces[item.key] = JSON.parse(item.data);
+                        this._workspaceVersions[item.key] = item.version;
                     }
                 });
 
@@ -242,6 +245,7 @@ export default class State {
                     action: action,
                     workspaceId: workspaceId,
                     workspace: (action != 'remove') ? this._workspaces[workspaceId] : null,
+                    version: this._workspaceVersions[workspaceId],
                 },
             };
             this._worker.postMessage(data);

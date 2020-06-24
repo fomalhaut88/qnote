@@ -41,10 +41,10 @@ export default class Api {
         });
     }
 
-    save(key, data, callback, callbackError) {
+    save(key, data, version, callback, callbackError) {
         var handler = (secret, callback, callbackError) => {
             var block = this._auth.encrypt(data);
-            var signature = this._auth.buildSignature(key, block);
+            var signature = this._auth.buildSignature(key, block, version);
             var secretSignature = secret ? this._auth.buildSecretSignature(secret) : "";
 
             this._http.post("save", {
@@ -52,12 +52,12 @@ export default class Api {
                 data_group: "",
                 data_key: key,
                 data_block: block,
-                data_version: "",
+                data_version: version,
                 signature: signature,
                 secret_signature: secretSignature,
             }).then(response => {
                 if (callback) {
-                    callback();
+                    callback(response.data);
                 }
             }, response => {
                 if (callbackError) {
@@ -123,9 +123,13 @@ export default class Api {
 
     _extractData(item) {
         var block = item.data_block;
-        if (this._auth.checkSignature(item.data_key, block, item.signature)) {
+        if (this._auth.checkSignature(item.data_key, block, item.data_version, item.signature)) {
             var data = this._auth.decrypt(block);
-            return { key: item.data_key, data: data };
+            return {
+                key: item.data_key,
+                data: data,
+                version: item.data_version,
+            };
         } else {
             throw new Error("Invalid signature.");
         }

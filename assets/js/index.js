@@ -50,10 +50,10 @@ window.onload = function() {
                 const worker = new UpdateWorker();
 
                 worker.addEventListener('message', e => {
-                    if (e.data.isPerforming !== undefined) {
+                    if (e.data.type == "status") {
                         this.$root.$emit('worker_performing', e.data.isPerforming);
                     }
-                    if (e.data.error !== undefined) {
+                    if (e.data.type == "error") {
                         this.$root.$emit('worker_error', e.data.error);
                     }
                 }, false);
