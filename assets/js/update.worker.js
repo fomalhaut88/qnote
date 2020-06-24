@@ -2,7 +2,7 @@ import Auth from './auth';
 import Api from './api';
 import LazyUpdater from './lazy_updater';
 
-importScripts("../hash-storage-wasm/hash_storage_wasm.js");
+importScripts("../hash-storage-wasm/hash_storage_wasm.js?v=0.3");
 
 
 wasm_bindgen("../hash-storage-wasm/hash_storage_wasm_bg.wasm").then(() => {
