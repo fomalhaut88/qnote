@@ -245,7 +245,7 @@ export default class State {
                     action: action,
                     workspaceId: workspaceId,
                     workspace: (action != 'remove') ? this._workspaces[workspaceId] : null,
-                    version: this._workspaceVersions[workspaceId],
+                    version: this._workspaceVersions[workspaceId] ? this._workspaceVersions[workspaceId] : '0',
                 },
             };
             this._worker.postMessage(data);

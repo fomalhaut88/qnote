@@ -125,6 +125,11 @@ wasm_bindgen("../hash-storage-wasm/hash_storage_wasm_bg.wasm").then(() => {
                         } else {
                             sendError("Remote version does not match. Reload the page.");
                         }
+                    }, () => {
+                        saveWorkspace(key, data, version, () => {
+                            workspaceVersionCache[item.data.workspaceId] = version;
+                            callback();
+                        });
                     });
                 } else {
                     saveWorkspace(key, data, version, callback);
