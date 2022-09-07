@@ -8,3 +8,5 @@
 /assets/bundles/
 
 /restart.sh
+
+/.env.local
