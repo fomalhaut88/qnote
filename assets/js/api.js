@@ -6,7 +6,7 @@ export default class Api {
         this._auth = null;
 
         this._http = axios.create({
-            baseURL: 'https://hashstorage.fomalhaut.su/api/v1/',
+            baseURL: 'https://hashstorage.alexfomalhaut.com/api/v1/',
         });
     }
 
